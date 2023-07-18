@@ -22,6 +22,8 @@ urlpatterns = [
     path("",include('HexaApp.urls')),
     path('auth/', include('authentication.urls')),
     path('owner/',include('Owner.urls')),
-    path('analyst/',include('Analyst.urls'))
+    path('analyst/',include('Analyst.urls')),
+     path('regulator/',include('Regulator.urls'))
+
 
 ]

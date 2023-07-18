@@ -48,34 +48,34 @@ def home(request):
 
 
 def regulator_register(request):
-    # form = CreateUserForm()
-    # if request.method == 'POST':
-    #     form = CreateUserForm(request.POST)
-    #     username = request.POST.get('username')
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        username = request.POST.get('username')
         
-    #     if form.is_valid():
-    #         form.save()
-    #         uobj = User.objects.get(username=username)           
-    #         uobj.save()
-    #         return redirect('owner')
-    # context = {'form': form }
-    return render(request, 'Regulator/RegulatorRegistration.html')
+        if form.is_valid():
+            form.save()
+            uobj = User.objects.get(username=username)           
+            uobj.save()
+            return redirect('/regulator/')
+    context = {'form': form }
+    return render(request, 'Regulator/RegulatorRegistration.html',context)
 
 
 
 def regulator_login(request):
-        # if request.method == 'POST':
-        #     username = request.POST.get('username')
-        #     password = request.POST.get('password')
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        #     user = authenticate(request, username=username, password = password)
-        #     if (user is not None) and (user.is_data_owner) == 1:
-        #         login(request, user)
-        #         return redirect('/owner/')
-        #     else:
-        #         messages.info(request, "Username or Password is incorrect.")
-        # context = {}
-        return render(request, 'Regulator/RegulatorLogin.html')
+            user = authenticate(request, username=username, password = password)
+            if (user is not None) and (user.is_regulators) == 1:
+                login(request, user)
+                return redirect('/regulator/')
+            else:
+                messages.info(request, "Username or Password is incorrect.")
+        context = {}
+        return render(request, 'Regulator/RegulatorLogin.html',context)
 
 def analyst_register(request):
     form = CreateUserForm()
