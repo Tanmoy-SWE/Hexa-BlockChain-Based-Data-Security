@@ -1,61 +1,407 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Menu, INTUITIVE">
+    <meta name="description" content="">
     <title>Chatbot</title>
-</head>
-<body>
-    <h1>Chatbot</h1>
-    <div id="chatbox">
-        <div id="chatlog"></div>
-        <input type="text" id="userInput" placeholder="Type your message here...">
-        <button onclick="sendMessage()">Send</button>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nicepage.css' %} ">
+    
+    <script class="u-script" type="text/javascript" src="{% static 'js/jquery.js' %}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{% static 'js/nicepage.js' %}" defer=""></script>
+    <meta name="generator" content="Nicepage 5.13.1, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "images/Copy_of_Blockchain_Network_Logo__1_-removebg-preview.png",
+		"sameAs": []
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Home">
+    <meta property="og:type" content="website">
+  <meta data-intl-tel-input-cdn-path="intlTelInput/">
+  </head>
+  <style>
+        body {
+             font-family: 'Chakra Petch', sans-serif;
+             background-color: #260556;
+            {% comment %} background-image: url('/static/images/bg.jpg'); {% endcomment %}
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            display: flex;
+            justify-content: space-between;
+
+            max-width: 1350px;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chatbox {
+            flex: 5; /* Adjusted to 50% width */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+
+        .image-container {
+            border-radius: 10px;
+            {% comment %} flex: 5; /* Adjusted to 50% width */ {% endcomment %}
+            display: flex;
+            flex-direction:column;
+            {% comment %} align-items: center;
+            justify-content: center; {% endcomment %}
+        }
+
+        .image-section img {
+            max-width: 90%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .chatbox h1 {
+            text-align: center;
+        }
+
+        #chatlog {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        div#chatlog div {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+
+        }
+
+        div#chatlog div:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        div#chatlog div:nth-child(even) {
+            flex-direction: row;
+        }
+
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .message {
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            width: 70%;
+            white-space: pre-wrap;
+        }
+
+        .user-message {
+        align-self: flex-end;
+        color: #ffffff;
+        white-space: pre-wrap;
+        background-color: #0663c5;
+        padding: 6px;
+        border-radius: 20px;
+        justify-content: flex-end; /* Add this line */
+    }
+
+    .bot-message {
+        align-self: flex-start;
+        background-color: #f0f0f0;
+        white-space: pre-wrap;
+        justify-content: flex-start; /* Add this line */
+    }
+        .message-section {
+            flex: 5;
+        }
+        .root-container {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #6f6c6c;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 2000px;
+            background-color: #FFFFFF   ;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            color : #fffff;
+        }
+
+        legend {
+            color : #fffff;
+        }
+
+        a {
+            color : #f2f2f2;
+            align-items: center;
+        }
+  </style>
+  <body>
+    <header class="u-clearfix u-custom-color-6 u-header u-sticky u-sticky-a762 u-header" id="sec-72a6" data-href="https://nicepage.com"><div class="u-clearfix u-sheet u-sheet-1">
+        <a href="{% url 'owner' %}" class="u-hover-feature u-image u-logo u-image-1" data-image-width="500" data-image-height="500" data-animation-name="customAnimationIn" data-animation-duration="1000">
+          <img src="{% static 'images/Copy_of_Blockchain_Network_Logo__1_-removebg-preview.png' %}" class="u-logo-image u-logo-image-1">
+        </a>
+        <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1" data-responsive-from="MD">
+          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px; font-weight: 700; text-transform: uppercase;">
+            <a class="u-button-style u-custom-active-border-color u-custom-active-color u-custom-border u-custom-border-color u-custom-borders u-custom-hover-border-color u-custom-hover-color u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-active-color u-custom-text-color u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+              <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
+              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+</g></svg>
+            </a>
+          </div>
+          <div class="u-custom-menu u-nav-container">
+            <ul class="u-nav u-spacing-30 u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-4-base" href="{% url 'owner' %}" style="padding: 10px 0px;">Home</a>
+</li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-4-base" href="{% url 'about' %}" style="padding: 10px 0px;">About</a>
+</li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-4-base" href="{% url 'contact' %}" style="padding: 10px 0px;">Contact</a>
+</li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-base u-border-no-left u-border-no-right u-border-no-top u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-4-base" style="padding: 10px 0px;"  href="{% url 'home' %}">Logout</a>
+</li></ul>
+          </div>
+          <div class="u-custom-menu u-nav-container-collapse">
+            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+              <div class="u-inner-container-layout u-sidenav-overflow">
+                <div class="u-menu-close"></div>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'owner' %}">Home</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'about' %}">About</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'contact' %}">Contact</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link"  href="{% url 'home' %}">Logout</a>
+</li></ul>
+              </div>
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          </div>
+        </nav>
+      </div></header>
+
+<br><br>
+
+    {% comment %} bot {% endcomment %}
+    <div class="chat-container">
+      <div
+        class="message-section"
+        style="
+          width: 70%;
+          margin: 40px;
+          margin-right: 80px;
+          background-color: black;
+          padding: 20px;
+          border-radius: 10px;
+        "
+      >
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <div
+            style="
+              color: white;
+              text-align: center;
+              background-color: #181818;
+              padding: 15px;
+              border-radius: 50px;
+              display: inline-block;
+            "
+          >
+            Chat with Us!
+          </div>
+        </div>
+
+        <br /><br />
+        <div class="chatbox" style="background-color: #4c7397; color: white">
+          <h3 style="text-align:center;">HEXA</h3>
+          <div id="chatlog"></div>
+          <div class="input-container">
+            <input
+              type="text"
+              style="background-color: white; color: black"
+              id="userInput"
+              placeholder="Type your message here..."
+            />
+            <button onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="image-section"
+        style="color: white; margin-left: 50px; margin-top: 20px"
+      >
+        <div class="image-container">
+          <div style="display: flex">
+            <img src={% static 'images/Copy_of_Blockchain_Network_Logo__1_-removebg-preview.png' %}
+            style="width:80px; height:80px; margin-top:10px;">
+            <h2>Hexa Chatbot</h2>
+          </div>
+          <div>
+            <p>Nihil vero nostrum asperiores id adipisci deserunt illum</p>
+            <p>e numquam eos magni, fuga aperiam sint consectetu</p>
+            <p>porro commodi doloribus consequatur. Quis esse a</p>
+          </div>
+      
+        </div>
+      </div>
     </div>
 
+
+
     <script>
-        function appendMessage(message) {
-            var chatlog = document.getElementById("chatlog");
-            var messageDiv = document.createElement("div");
-            messageDiv.innerHTML = message;
-            chatlog.appendChild(messageDiv);
-        }
+      const userAvatarUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png?w=740&t=st=1691311375~exp=1691311975~hmac=0f652e2d071f60fafc0fe003ca7ce08dac12fb602ce27b17a8d54c8504ce982f";
+      const botAvatarUrl = "https://img.freepik.com/premium-vector/medical-robot-android_111928-2.jpg?w=740";
 
-        function sendMessage() {
-            var userInput = document.getElementById("userInput").value;
-            if (userInput.trim() !== "") {
-                appendMessage("You: " + userInput);
-                document.getElementById("userInput").value = "";
+      {% comment %} function appendMessage(message) {
+          var chatlog = document.getElementById("chatlog");
+          var messageDiv = document.createElement("div");
+          messageDiv.innerHTML = message;
+          chatlog.appendChild(messageDiv);
+      } {% endcomment %}
+      function appendMessage(message, isUserMessage) {
+          var chatlog = document.getElementById("chatlog");
+          var messageDiv = document.createElement("div");
 
-                fetch(window.location.href, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: 'user_input=' + encodeURIComponent(userInput)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    appendMessage(data.response);
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        }
+          // Create image element for user or bot based on isUserMessage flag
+          var avatarImg = document.createElement("img");
+          avatarImg.src = isUserMessage ? userAvatarUrl : botAvatarUrl;
+          avatarImg.style.width = "30px";
+          avatarImg.style.height = "30px";
+          avatarImg.style.borderRadius = "50%";
+          avatarImg.style.padding= "5px";
+          messageDiv.appendChild(avatarImg);
 
-        // Function to get the CSRF token
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+          // Create message content element
+          var messageContent = document.createElement("span");
+          messageContent.className = isUserMessage ? "user-message" : "bot-message";
+          messageContent.innerText = message;
+          messageContent.style.padding= "15px";
+          messageDiv.appendChild(messageContent);
+
+          // Append the message div to the chat log
+          chatlog.appendChild(messageDiv);
+      }
+
+      {% comment %} function sendMessage() {
+          var userInput = document.getElementById("userInput").value;
+          if (userInput.trim() !== "") {
+              appendMessage("You: " + userInput);
+              document.getElementById("userInput").value = "";
+
+              fetch(window.location.href, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'X-CSRFToken': getCookie('csrftoken')
+                  },
+                  body: 'user_input=' + encodeURIComponent(userInput)
+              })
+              .then(response => response.json())
+              .then(data => {
+                  appendMessage(data.response);
+              })
+              .catch(error => console.error('Error:', error));
+          }
+      } {% endcomment %}
+
+      function sendMessage() {
+          var userInput = document.getElementById("userInput").value;
+          if (userInput.trim() !== "") {
+              appendMessage("You: " + userInput, true);
+              document.getElementById("userInput").value = "";
+
+              fetch(window.location.href, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'X-CSRFToken': getCookie('csrftoken')
+                  },
+                  body: 'user_input=' + encodeURIComponent(userInput)
+              })
+              .then(response => response.json())
+              .then(data => {
+                  appendMessage("" + data.response, false);
+              })
+              .catch(error => console.error('Error:', error));
+          }
+      }
+
+
+      // Function to get the CSRF token
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
     </script>
-</body>
+  </body>
 </html>
