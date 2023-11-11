@@ -13,5 +13,8 @@ def about(request):
 def contact(request):
     return render(request,'Contact.html')
 
+def pricing(request):
+    return render(request,'pricing.html')
+
 def form(request):
     return render(request,'Form.html')
